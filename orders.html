@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>m_lunch — Weekly Orders</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("mlunch-theme")||"dark");}catch(e){document.documentElement.setAttribute("data-theme","dark");}</script>
+  <script type="module" src="js/theme.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="index.html">m_lunch</a>
+    <nav class="masthead-nav" aria-label="Primary">
+      <a href="index.html">Order Lunch</a>
+      <span class="masthead-nav-current" aria-current="page">Orders</span>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero buddy-hero" id="ordersHero">
+      <div class="buddy-text">
+        <h1>Weekly Order <span class="accent">Summary</span></h1>
+        <p class="tagline">Filter by name, day, team, or dish.</p>
+      </div>
+    </section>
+
+    <div class="page-toolbar">
+      <div class="toolbar-head">
+        <span class="week-badge">
+          <span class="week-eyebrow">This week</span><span id="weekLabel"></span>
+          <button type="button" class="week-edit-btn hidden" id="changeWeekBtn" aria-label="Change week" data-tooltip="Change week"></button>
+        </span>
+        <div class="toolbar-actions">
+          <button type="button" class="secondary clear-filters hidden" id="clearFiltersBtn">Clear filters</button>
+          <button type="button" class="primary hidden" id="adminAddOrderBtn">Add an order</button>
+        </div>
+      </div>
+
+      <div class="week-summary hidden" id="weekSummary"></div>
+
+      <div class="filters">
+        <div class="combobox" id="searchCombobox">
+          <input type="text" id="searchInput" autocomplete="off" placeholder="Search by name…">
+          <button type="button" class="combobox-clear hidden" id="searchClearBtn" aria-label="Clear search"></button>
+          <div class="combobox-list hidden" id="searchOptions"></div>
+        </div>
+        <div class="day-select" id="dayFilterSelect">
+          <button type="button" class="day-select-trigger placeholder" id="dayFilterTrigger">All days</button>
+          <div class="combobox-list hidden" id="dayFilterOptions"></div>
+        </div>
+        <div class="day-select" id="teamFilterSelect">
+          <button type="button" class="day-select-trigger placeholder" id="teamFilterTrigger">All teams</button>
+          <div class="combobox-list hidden" id="teamFilterOptions"></div>
+        </div>
+        <div class="day-select" id="itemFilterSelect">
+          <button type="button" class="day-select-trigger placeholder" id="itemFilterTrigger">All dishes</button>
+          <div class="combobox-list hidden" id="itemFilterOptions"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="summaryDays"></div>
+    <div class="empty-state no-results-all hidden" id="noResultsAll">
+      <p class="empty-state-title">No orders match your filters</p>
+      <p class="empty-state-sub">Try clearing a filter to see more of the week.</p>
+    </div>
+  </main>
+
+  <div class="confirm-overlay hidden" id="changeWeekOverlay">
+    <div class="panel add-order-dialog" role="dialog" aria-modal="true" aria-labelledby="changeWeekTitle">
+      <p class="eyebrow" id="changeWeekTitle">Change current week</p>
+      <div class="add-order-fields">
+        <div class="field-label">
+            <label for="changeWeekInput">Target week</label>
+            <input type="date" id="changeWeekInput" data-picker="date">
+          </div>
+      </div>
+      <p class="change-week-hint">Changes only the active week — menu data is preserved.</p>
+      <div class="button-row">
+        <button type="button" class="secondary confirm-cancel" id="changeWeekCancel">Cancel</button>
+        <button type="button" class="primary" id="changeWeekSubmit">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirm-overlay hidden" id="addOrderOverlay">
+    <div class="panel add-order-dialog" role="dialog" aria-modal="true" aria-labelledby="addOrderTitle">
+      <p class="eyebrow" id="addOrderTitle">Add an order</p>
+      <div class="add-order-fields">
+        <div class="field-label">
+          <label for="addOrderDayTrigger">Day</label>
+          <div class="day-select" id="addOrderDaySelect">
+            <button type="button" class="day-select-trigger placeholder" id="addOrderDayTrigger">Choose a day…</button>
+            <div class="combobox-list hidden" id="addOrderDayOptions"></div>
+          </div>
+        </div>
+        <div class="field-label">
+          <label for="addOrderMemberSearch">Member</label>
+          <div class="combobox add-order-combobox" id="addOrderMemberCombobox">
+            <input type="text" id="addOrderMemberSearch" autocomplete="off" placeholder="Search a member…">
+            <button type="button" class="combobox-clear hidden" id="addOrderMemberClearBtn" aria-label="Clear selected member"></button>
+            <div class="combobox-list hidden" id="addOrderMemberOptions"></div>
+          </div>
+        </div>
+        <div class="field-label">
+          <label for="addOrderDishTrigger">Dish</label>
+          <div class="day-select dropup" id="addOrderDishSelect">
+            <button type="button" class="day-select-trigger placeholder" id="addOrderDishTrigger">Choose a dish…</button>
+            <div class="combobox-list hidden" id="addOrderDishOptions"></div>
+          </div>
+        </div>
+      </div>
+      <div class="button-row">
+        <button type="button" class="secondary confirm-cancel" id="addOrderCancel">Cancel</button>
+        <button type="button" class="primary" id="addOrderSubmit">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/orders.js"></script>
+</body>
+</html>

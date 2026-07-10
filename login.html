@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>m_lunch — Sign In</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("mlunch-theme")||"dark");}catch(e){document.documentElement.setAttribute("data-theme","dark");}</script>
+  <script type="module" src="js/theme.js"></script>
+</head>
+<body>
+  <div id="gateScreen" class="gate-screen hidden">
+    <div class="gate-panel">
+      <div class="gate">
+        <span class="gate-badge">HR Team Only</span>
+        <h1>Sign In</h1>
+        <p class="gate-subtitle">Sign in to manage the weekly menu, employee roster, lunch orders, and reports.</p>
+        <form id="gateForm">
+          <label for="usernameInput">Username</label>
+          <div class="input-icon input-icon-user">
+            <input id="usernameInput" type="text" autocomplete="username" placeholder="Enter your username">
+          </div>
+          <label for="passwordInput">Password</label>
+          <div class="input-icon input-icon-pass">
+            <input id="passwordInput" type="password" autocomplete="current-password" placeholder="Enter your password">
+          </div>
+          <p id="pinError" class="status error"></p>
+          <button id="pinBtn" type="submit" class="primary">Sign in</button>
+        </form>
+        <a class="gate-back" href="index.html">Back to Order Lunch</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>

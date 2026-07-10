@@ -1,0 +1,22 @@
+rules_version = '2';
+
+// Open read/write rules — this is an internal, trust-based tool with no real
+// authentication (admin login is a plaintext config/adminAuth doc, checked
+// client-side). Anyone who can reach Firestore can already read/write these
+// collections, so the rules just formalize that.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /config/{doc} {
+      allow read, write: if true;
+    }
+    match /employees/{id} {
+      allow read, write: if true;
+    }
+    match /menu/{date} {
+      allow read, write: if true;
+    }
+    match /orders/{date}/entries/{employee} {
+      allow read, write: if true;
+    }
+  }
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>m_lunch — Order Lunch</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("mlunch-theme")||"dark");}catch(e){document.documentElement.setAttribute("data-theme","dark");}</script>
+  <script type="module" src="js/theme.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="index.html">m_lunch</a>
+    <nav class="masthead-nav" aria-label="Primary">
+      <span class="masthead-nav-current" aria-current="page">Order Lunch</span>
+      <a href="orders.html">Orders</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero buddy-hero">
+      <div class="buddy-text">
+        <h1 id="buddySay">Select <span class="accent">your name</span> to begin.</h1>
+        <div class="meter">
+          <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+          <span class="meter-num" id="meterNum">0/5</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="page-toolbar">
+      <div class="week-info">
+        <span class="week-badge">
+          <span class="week-eyebrow">This week</span><span id="weekLabel"></span>
+          <button type="button" class="week-edit-btn hidden" id="changeWeekBtn" aria-label="Change week" data-tooltip="Change week"></button>
+        </span>
+      </div>
+    </div>
+
+    <div class="confirm-overlay hidden" id="changeWeekOverlay">
+      <div class="panel add-order-dialog" role="dialog" aria-modal="true" aria-labelledby="changeWeekTitle">
+        <p class="eyebrow" id="changeWeekTitle">Change current week</p>
+        <div class="add-order-fields">
+          <div class="field-label">
+            <label for="changeWeekInput">Target week</label>
+            <input type="date" id="changeWeekInput" data-picker="date">
+          </div>
+        </div>
+        <p class="change-week-hint">Changes only the active week — menu data is preserved.</p>
+        <div class="button-row">
+          <button type="button" class="secondary confirm-cancel" id="changeWeekCancel">Cancel</button>
+          <button type="button" class="primary" id="changeWeekSubmit">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="house-rule-overlay hidden" id="houseRuleOverlay" role="dialog" aria-modal="true" aria-labelledby="houseRuleTitle">
+      <div class="house-rule" id="houseRule">
+        <button type="button" class="house-rule-dismiss" id="houseRuleDismiss" data-house-close aria-label="Close"></button>
+        <h2 class="house-rule-title" id="houseRuleTitle">Ordering Policy</h2>
+        <p class="house-rule-text">You must either <strong>consume your meal or pay the MoMo charge</strong>, even if you transfer the meal to another employee.</p>
+        <div class="house-rule-pay">
+          <img class="house-rule-qr" src="assets/img/momo-qr.png" alt="MoMo payment QR code for MESONEER">
+          <div class="house-rule-pay-info">
+            <p class="house-rule-pay-name">MESONEER</p>
+            <p class="house-rule-pay-hint">Scan to pay for a missed order.</p>
+          </div>
+        </div>
+        <button type="button" class="primary house-rule-cta" data-house-close>Continue</button>
+      </div>
+    </div>
+
+    <form id="orderForm">
+      <div class="name-panel">
+        <label class="row-label" for="employeeSearch">Employee Name</label>
+        <div class="combobox" id="employeeCombobox">
+          <input type="text" id="employeeSearch" autocomplete="off" placeholder="Search your own name only…">
+          <button type="button" class="combobox-clear hidden" id="employeeClearBtn" aria-label="Clear selected name"></button>
+          <div class="combobox-list hidden" id="employeeOptions"></div>
+        </div>
+      </div>
+
+      <div class="order-list">
+        <div id="dayRows"></div>
+        <div class="submit-row">
+          <button id="submitBtn" type="submit" class="primary" disabled>Submit weekly order</button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <script type="module" src="js/employee.js"></script>
+</body>
+</html>

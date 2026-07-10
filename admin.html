@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>m_lunch — Administration</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("mlunch-theme")||"dark");}catch(e){document.documentElement.setAttribute("data-theme","dark");}</script>
+  <script type="module" src="js/theme.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="index.html">m_lunch</a>
+    <nav class="masthead-nav" aria-label="Primary">
+      <a href="index.html">Order Lunch</a>
+      <a href="orders.html">Orders</a>
+      <span class="masthead-nav-current" aria-current="page">Admin</span>
+    </nav>
+  </header>
+
+  <main class="page" id="pageMain">
+    <section class="hero buddy-hero hidden" id="adminHero">
+      <div class="buddy-text">
+        <h1>Manage the <span class="accent">Weekly Menu</span></h1>
+        <p class="tagline">Manage the weekly menu, review order reports, and maintain the employee roster.</p>
+      </div>
+    </section>
+
+    <div class="page-toolbar hidden" id="adminToolbar">
+      <div class="week-info">
+        <span class="week-badge">
+          <span class="week-eyebrow">This week</span><span id="weekLabel"></span>
+          <button type="button" class="week-edit-btn" id="changeWeekBtn" aria-label="Change week" data-tooltip="Change week"></button>
+        </span>
+      </div>
+    </div>
+
+    <div class="confirm-overlay hidden" id="changeWeekOverlay">
+      <div class="panel add-order-dialog" role="dialog" aria-modal="true" aria-labelledby="changeWeekTitle">
+        <p class="eyebrow" id="changeWeekTitle">Change current week</p>
+        <div class="add-order-fields">
+          <div class="field-label">
+            <label for="changeWeekInput">Target week</label>
+            <input type="date" id="changeWeekInput" data-picker="date">
+          </div>
+        </div>
+        <p class="change-week-hint">Changes only the active week — menu data is preserved.</p>
+        <div class="button-row">
+          <button type="button" class="secondary confirm-cancel" id="changeWeekCancel">Cancel</button>
+          <button type="button" class="primary" id="changeWeekSubmit">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="content" class="hidden">
+      <div class="admin-tabs" id="adminTabs" role="tablist" aria-label="Admin sections">
+        <button type="button" class="admin-tab active" data-tab="menu" role="tab" aria-selected="true">Menu</button>
+        <button type="button" class="admin-tab" data-tab="reports" role="tab" aria-selected="false">Reports</button>
+        <button type="button" class="admin-tab" data-tab="roster" role="tab" aria-selected="false">Roster</button>
+      </div>
+
+      <section class="panel admin-panel" id="panel-menu" data-panel="menu">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Menu</p>
+            <h2>This Week's Menu</h2>
+          </div>
+          <div class="button-row panel-head-actions">
+            <button id="saveMenuBtn" type="button" class="primary">Save menu</button>
+          </div>
+        </div>
+        <div class="tip-callout">
+          <span class="tip-callout-icon" aria-hidden="true">💡</span>
+          <div class="tip-callout-body">
+            <span class="tip-callout-badge">Tip</span>
+            <p class="tip-callout-text">Copy a <strong>Monday–Friday block</strong> from <strong>Google Sheets</strong> and paste it into any cell to fill the week at once.</p>
+          </div>
+        </div>
+        <div class="menu-editor-scroll">
+          <table class="menu-editor" id="menuEditor">
+            <thead id="menuEditorHead"></thead>
+            <tbody id="menuEditorBody"></tbody>
+          </table>
+        </div>
+        <button id="addRowBtn" type="button" class="menu-add-row">Add row</button>
+      </section>
+
+      <section class="panel admin-panel hidden" id="panel-reports" data-panel="reports">
+        <p class="eyebrow">Reports</p>
+        <h2>Order summary</h2>
+        <label class="field-label" id="summaryModeLabel">Show orders for</label>
+        <div class="segmented" id="summaryModeRow" role="group" aria-labelledby="summaryModeLabel">
+          <button type="button" class="segmented-btn summary-mode-btn active" data-mode="month">Month</button>
+          <button type="button" class="segmented-btn summary-mode-btn" data-mode="range">Date range</button>
+          <button type="button" class="segmented-btn summary-mode-btn" data-mode="day">Single day</button>
+        </div>
+        <div class="summary-filters">
+          <input type="month" id="summaryMonthInput" class="summary-filter-input" data-picker="month">
+          <div id="summaryRangeInputs" class="summary-filter-input hidden">
+            <input type="date" id="summaryRangeFrom" data-picker="date">
+            <span>to</span>
+            <input type="date" id="summaryRangeTo" data-picker="date">
+          </div>
+          <input type="date" id="summaryDayInput" class="summary-filter-input hidden" data-picker="date">
+        </div>
+        <p class="status hidden" id="summaryStatus"></p>
+        <div class="summary-results hidden" id="summaryResults">
+          <div class="stat-tiles" id="summaryStats"></div>
+          <div class="summary-bars" id="summaryBars"></div>
+        </div>
+        <div class="empty-state hidden" id="summaryEmptyState">
+          <p class="empty-state-title">No orders in this period</p>
+          <p class="empty-state-sub">Try a different month, range, or day.</p>
+        </div>
+      </section>
+
+      <section class="panel admin-panel hidden" id="panel-roster" data-panel="roster">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Roster</p>
+            <h2>Employees</h2>
+          </div>
+          <span class="day-total" id="employeeCountBadge"></span>
+        </div>
+        <div id="employeesBody" class="section-body">
+          <div id="employeeList" class="admin-roster"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

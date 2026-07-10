@@ -1,0 +1,8 @@
+.DS_Store
+
+# IDE
+.idea/
+*.iml
+
+# Claude Code — personal/local overrides (shared config lives in .claude/settings.json)
+.claude/settings.local.json
